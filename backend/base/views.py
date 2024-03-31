@@ -1,23 +1,29 @@
+from typing import Any, Dict
 from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Product
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer, UserSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 # Create your views here.
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
+    # @classmethod
+    # def get_token(cls, user):
+    #     token = super().get_token(user)
 
-        # Add custom claims
-        token['username'] = user.username
+    #     # Add custom claims
+    #     token['username'] = user.username
 
-        return token
+    #     return token
+    def validate(self, attrs: Dict[str, Any]) -> Dict[str, str]:
+        data = super().validate(attrs)
+        data['username'] = self.user.username
+        data['email'] = self.user.email
+        return data
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -26,6 +32,12 @@ class MyTokenObtainPairView(TokenObtainPairView):
 def getRoutes(request):
     routes = ['/api/products','/api/products/<id>', '/api/products/create', '/api/products/all']
     return Response(routes)
+
+@api_view(['GET'])
+def getUserProfile(request):
+    user = request.user
+    serializer = UserSerializer(user, many=False)
+    return Response(serializer.data)
 
 @api_view(['GET'])
 def getProducts(request):
