@@ -6,6 +6,6 @@ from base.views import product_views
 
 
 urlpatterns = [
-    path('products/', product_views.getProducts, name='products'),
-    path('product/<str:pk>/', product_views.getProduct, name='product')
+    path('/', product_views.getProducts, name='products'),
+    path('/<str:pk>/', product_views.getProduct, name='product')
 ]

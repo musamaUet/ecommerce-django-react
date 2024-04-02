@@ -55,6 +55,31 @@ def getUserProfile(request):
     serializer = UserSerializer(user, many=False)
     return Response(serializer.data)
 
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateUserProfile(request):
+    try:
+        user = request.user
+        data = request.data
+        print('useris', user)
+        serializer = UserSerializerWithToken(user, many=False)
+        print('serializer', serializer)
+
+        user.first_name = data['name']
+        user.email = data['email']
+        # user.username = data['username']
+
+        if data['password']:
+            user.password = make_password(data['password'])
+
+        user.save()
+        return Response(serializer.data)
+    except Exception as e:
+        print('error is ', e)
+        # Handle exception
+        error_message = {'detail': str(e)}  # Create error response
+        return Response(error_message, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def getUsers(request):
