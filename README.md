@@ -28,5 +28,6 @@
 - 2 - cd ecommerce-django-react
 - 3 - Create virtual environment: virtualenv myenv
 - 4 - myenv\scripts\activate
-- 5 - pip install -r requirements.txt
-- 6 - python manage.py runserver
+- 5 - pip freeze > requirements.txt
+- 6 - pip install -r requirements.txt
+- 7 - python manage.py runserver
