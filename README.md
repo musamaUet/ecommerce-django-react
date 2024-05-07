@@ -6,6 +6,8 @@
 ###### django-admin startproject <project_name>
 ###### python manage.py startapp <app_name>
 ###### django-admin <createsuperuser>
+##### pip install -r requireemnts.tsx
+
 
 # Features
 
